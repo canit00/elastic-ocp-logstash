@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: elastic-logstash
+  name: elastic-ocp-logstash
   namespace: logging
   labels:
     app: elastic-logstash-template
@@ -22,8 +22,8 @@ spec:
         provider: elastic.co
     spec:
       containers:
-        - name: logstash-elasticsearch
-          image: logging/logstash-elasticsearch:lastest
+        - name: elastic-ocp-logstash
+          image: logging/elastic-ocp-logstash:latest
           resources:
             limits:
               cpu: 100m
