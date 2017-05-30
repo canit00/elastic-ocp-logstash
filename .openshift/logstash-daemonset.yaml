@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: elastic-logstash
+  namespace: logging
+  labels:
+    app: elastic-logstash-template
+    component: logstash
+    logging-infra: logstash
+    provider: elastic.co
+spec:
+  selector:
+    matchLabels:
+      component: logstash
+      provider: elastic.co
+  template:
+    metadata:
+      name: logstash-elasticsearch
+      creationTimestamp: null
+      labels:
+        component: logstash
+        provider: elastic.co
+    spec:
+      containers:
+        - name: logstash-elasticsearch
+          image: logging/logstash-elasticsearch:lastest
+          resources:
+            limits:
+              cpu: 100m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 300
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        logging-infra-logstash: 'true'
+      serviceAccountName: aggregated-logging-logstash
+      serviceAccount: aggregated-logging-logstash
+      securityContext: {}
